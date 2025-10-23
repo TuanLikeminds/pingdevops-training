@@ -94,12 +94,12 @@ jobs:
 
         helm upgrade --install pingfederate-release pingidentity/ping-devops \
         --set global.envs.PING_IDENTITY_ACCEPT_EULA=YES \
-        --set pingfederate-engine.envs.GITHUB_RELEASE_TAG=$GITHUB_RELEASE_TAG \
-        --set pingfederate-admin.envs.GITHUB_RELEASE_TAG=$GITHUB_RELEASE_TAG \
+        --set pingfederate-admin.image.repository=$DOCR_REGISTRY/$DOCR_REPOSITORY \
+        --set pingfederate-engine.image.repository=$DOCR_REGISTRY/$DOCR_REPOSITORY \
         --set global.addReleaseNameToResource=none \
         --set pingtoolkit.image.tag="2508" \
-        --set pingfederate-admin.image.tag=$BASE_IMAGE_TAG \
-        --set pingfederate-engine.image.tag=$BASE_IMAGE_TAG \
+        --set pingfederate-admin.image.tag=$RELEASE_TAG \
+        --set pingfederate-engine.image.tag=$RELEASE_TAG \
         --version 0.10.0 \
         --namespace=$LAB_NAMESPACE \
         -f baseline/pingfederate/values.yaml
