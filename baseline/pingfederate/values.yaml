@@ -1902,3 +1902,4 @@ testFramework:
       runAsNonRoot: true
       seccompProfile:
         type: RuntimeDefault
+
