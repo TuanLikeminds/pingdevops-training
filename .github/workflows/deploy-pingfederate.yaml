@@ -13,6 +13,9 @@ env:
   LAB_NAMESPACE: default
   #change the cluster name if the k8s cluster name is different
   DO_K8S_CLUSTER: k8s-1-33-1-do-5-blr1-1761210111081
+  DOCR_REGISTRY: registry.digitalocean.com/ping-devops-training
+  DOCR_REPOSITORY: pingfederate
+
 
 
 jobs:
@@ -22,6 +25,9 @@ jobs:
 
     steps:
 
+    - name: Set Release Tag variable
+      id: vars
+      run: echo "RELEASE_TAG=${STUDENT_NAMESPACE}-${GITHUB_REF#refs/*/}-${BASE_IMAGE_TAG}" >> $GITHUB_ENV
 
 
     # Check out the repository code
@@ -33,6 +39,23 @@ jobs:
       uses: digitalocean/action-doctl@v2
       with:
        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+    - name: Log in to DigitalOcean Container Registry
+      run: doctl registry login
+    
+
+
+    - name: Build, tag, and push image to DO Container Registry
+      run: |
+        docker build \
+        --build-arg BASE_IMAGE_REPOSITORY=$BASE_IMAGE_REPOSITORY \
+        --build-arg PRODUCT=$PRODUCT \
+        --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG \
+        -t $DOCR_REGISTRY/$DOCR_REPOSITORY:$RELEASE_TAG \
+        -f baseline/pingfederate/Dockerfile baseline/pingfederate/ 
+        echo "Image build completed" \ 
+        docker push $DOCR_REGISTRY/$DOCR_REPOSITORY:$RELEASE_TAG 
+        echo "Image push completed"
 
 
     # Update kubeconfig to access the DO cluster
