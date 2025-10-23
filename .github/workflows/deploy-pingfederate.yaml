@@ -48,14 +48,17 @@ jobs:
     - name: Build, tag, and push image to DO Container Registry
       run: |
         docker build \
-        --build-arg BASE_IMAGE_REPOSITORY=$BASE_IMAGE_REPOSITORY \
-        --build-arg PRODUCT=$PRODUCT \
-        --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG \
-        -t $DOCR_REGISTRY/$DOCR_REPOSITORY:$RELEASE_TAG \
-        -f baseline/pingfederate/Dockerfile baseline/pingfederate/ 
-        echo "Image build completed" \ 
-        docker push $DOCR_REGISTRY/$DOCR_REPOSITORY:$RELEASE_TAG 
-        echo "Image push completed"
+          --build-arg BASE_IMAGE_REPOSITORY=$BASE_IMAGE_REPOSITORY \
+          --build-arg PRODUCT=$PRODUCT \
+          --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG \
+          -t $DOCR_REGISTRY/$DOCR_REPOSITORY:$RELEASE_TAG \
+          -f baseline/pingfederate/Dockerfile baseline/pingfederate/
+
+        echo "✅ Image build completed"
+
+        docker push $DOCR_REGISTRY/$DOCR_REPOSITORY:$RELEASE_TAG
+
+        echo "✅ Image push completed"
 
 
     # Update kubeconfig to access the DO cluster
