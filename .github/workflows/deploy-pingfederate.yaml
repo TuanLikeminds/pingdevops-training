@@ -27,7 +27,7 @@ jobs:
 
     - name: Set Release Tag variable
       id: vars
-      run: echo "RELEASE_TAG=${STUDENT_NAMESPACE}-${GITHUB_REF#refs/*/}-${BASE_IMAGE_TAG}" >> $GITHUB_ENV
+      run: echo "RELEASE_TAG=${LAB_NAMESPACE}-${GITHUB_REF#refs/*/}-${BASE_IMAGE_TAG}" >> $GITHUB_ENV
 
 
     # Check out the repository code
